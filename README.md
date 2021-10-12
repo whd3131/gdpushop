@@ -31,8 +31,12 @@ gdpu
 │      OrderInfoController
 │      PersonController
 │      UserController
-├─entity<br />├─interceptors<br />├─listener
-├─mapper<br />├─service<br />└─utils
+├─entity
+├─interceptors
+├─listener
+├─mapper
+├─service
+└─utils
 
 ## 2.3 技术选型
 
