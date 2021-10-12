@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gdpu.mapper.CartOrderMapper">
+
+    <select id="getPayInfo" resultType="com.gdpu.entity.vo.PayVo">
+        select g.title,g.price,g.goods_img,oi.order_price,c.nums,u.name,u.phone
+        from cart_order co
+                 join cart c on co.cart_id = c.id
+                 join goods g on c.goods_id = g.goods_id
+                 join order_info oi on co.order_id = oi.order_id
+                 join user u on c.user_id = u.user_id
+        where co.order_id = #{orderId}
+
+    </select>
+    <select id="getCartIdByOrderId" resultType="java.lang.String">
+        select cart_id from cart_order
+        where order_id = #{orderId}
+    </select>
+
+
+</mapper>
