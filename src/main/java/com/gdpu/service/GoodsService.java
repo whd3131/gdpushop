@@ -20,4 +20,8 @@ public interface GoodsService extends IService<Goods> {
 
     //添加一条商品
     boolean addGoods(String goodsInfo);
+
+    // 获取所有商品
+    List<Goods> getAllGoods();
+
 }

@@ -1,10 +1,13 @@
 package com.gdpu.controller;
 
 
+import com.gdpu.entity.OrderInfo;
 import com.gdpu.service.OrderInfoService;
 import com.gdpu.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * <p>
@@ -21,6 +24,13 @@ public class OrderInfoController {
 
     @Autowired
     private OrderInfoService orderInfoService;
+
+    //获取所有订单
+    @GetMapping("/getAllOrder")
+    public R getAllOrder(){
+        List<OrderInfo> orderList = orderInfoService.list();
+        return R.ok().data("orderList",orderList);
+    }
 
     //修改订单状态为已完成
     @PostMapping("/updateStatus")

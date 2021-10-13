@@ -98,7 +98,7 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         boolean co_res = cartOrderService.remove(wrapper);
 
 
-        return oi_res>0 && co_res;
+        return oi_res>0;
     }
 
 

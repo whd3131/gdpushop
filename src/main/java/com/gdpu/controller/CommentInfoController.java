@@ -31,6 +31,13 @@ public class CommentInfoController {
     @Autowired
     CommentInfoService commentInfoService;
 
+    //获得commentInfo表的所有内容
+    @GetMapping("/getAllComment")
+    public R getAllComment(){
+        List<CommentInfo> commentInfoList = commentInfoService.list();
+        return R.ok().data("commentInfoList",commentInfoList);
+    }
+
     //分页查询该商品的评论
     @PostMapping("/getComment/{goodsId}/{currentPage}/{limit}")
     public R getComment(@PathVariable String goodsId,

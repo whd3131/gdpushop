@@ -8,6 +8,7 @@ import com.gdpu.service.GoodsService;
 import com.gdpu.service.PersonService;
 import com.gdpu.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,6 +25,8 @@ import java.util.List;
 @RequestMapping("/goods")
 @CrossOrigin
 public class GoodsController {
+
+;
 
     @Autowired
     private GoodsService goodsService;
@@ -52,11 +55,18 @@ public class GoodsController {
         return R.ok().data("goodsList",goodsList);
     }
 
+    // 得到所有的商品
+    // 采用redis缓存
     @GetMapping("/getAllGoods")
     public R getAllGoods(){
         System.out.println("进入GoodsController - getAllGoods方法");
-        List<Goods> goodsList = goodsService.list();
+
+        List<Goods> goodsList = goodsService.getAllGoods();
+
+
+        //List<Goods> goodsList = goodsService.list();
         return R.ok().data("goodsList",goodsList);
+
     }
 
     /*根据ID获得一个商品的详情*/
