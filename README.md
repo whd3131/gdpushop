@@ -1,3 +1,5 @@
+# 广药商城项目
+
 # 1. 前言
 
 *gdpushop* 项目是广东药科大学192计算机科学与技术软件工程课程，完成的课程大作业。仅用于学习使用。
@@ -6,8 +8,8 @@
 
 *gdpushop* 项目是一套电商系统，包括前台系统和后台管理系统，基于Springboot+MyBatisPlus实现，前端采用Vue框架。
 
-* 前台商城系统包含首页、商品推荐与广告、商品搜索、商品展示、购物车、订单与支付流程等模块。
-* 后台管理系统包含商品管理，订单管理，会员管理，统计报表等模块。
+* 前台商城系统包含首页、商品推荐与广告、商品搜索、商品展示、购物车、订单与支付流程、用户收货地址管理、用户历史浏览记录、用户个人中心等模块。
+* 后台管理系统包含商品管理，订单管理，会员管理，统计报表、商家管理、商家与商品管理等模块。
 
 ## 2.1 项目演示
 
@@ -31,12 +33,8 @@ gdpu
 │      OrderInfoController
 │      PersonController
 │      UserController
-├─entity
-├─interceptors
-├─listener
-├─mapper
-├─service
-└─utils
+├─entity<br />├─interceptors<br />├─listener
+├─mapper<br />├─service<br />└─utils
 
 ## 2.3 技术选型
 
@@ -52,7 +50,8 @@ gdpu
 | Lombok                        | 简化对象封装工具    | [https://github.com/rzwitserloot/lombok](https://github.com/rzwitserloot/lombok) |
 | Hutool                        | Java工具类库        | [https://github.com/looly/hutool](https://github.com/looly/hutool) |
 | Swagger-UI<br />              | 文档生成工具        | [https://github.com/swagger-api/swagger-ui](https://github.com/swagger-api/swagger-ui) |
-| Easyexcel<br />               | 读写Excel的开源项目 | https://alibaba-easyexcel.github.io/                         |
+| Easyexcel<br />               | 读写Excel的开源项目 | [https://alibaba-easyexcel.github.io/](https://alibaba-easyexcel.github.io/) |
+| Spring Data Redis             | Spring集成Redis     | [https://docs.spring.io/spring-data/data-redis/docs/current/reference/html/#reference](https://docs.spring.io/spring-data/data-redis/docs/current/reference/html/#reference) |
 
 ### 2.3.2 前端技术
 
