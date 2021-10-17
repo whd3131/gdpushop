@@ -62,7 +62,7 @@ public class CodeGenerator {
 
         // 5、【需要修改】策略配置
         StrategyConfig strategy = new StrategyConfig();
-        strategy.setInclude("advertisement"); //不同的表用逗号分割，举例：（"t1","t2"）
+        strategy.setInclude("business","business_goods","business_order"); //不同的表用逗号分割，举例：（"t1","t2"）
         strategy.setNaming(NamingStrategy.underline_to_camel);//数据库表映射到实体的命名策略
         strategy.setTablePrefix(pc.getModuleName() + "_"); //生成实体时去掉表前缀
 

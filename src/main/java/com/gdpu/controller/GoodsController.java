@@ -1,17 +1,25 @@
 package com.gdpu.controller;
 
 
+import cn.hutool.json.JSONObject;
+import com.auth0.jwt.interfaces.Claim;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gdpu.entity.Goods;
 import com.gdpu.entity.Person;
+import com.gdpu.entity.vo.GoodsSearchVo;
 import com.gdpu.service.GoodsService;
 import com.gdpu.service.PersonService;
+import com.gdpu.utils.JwtUtil;
 import com.gdpu.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -59,15 +67,45 @@ public class GoodsController {
     // 采用redis缓存
     @GetMapping("/getAllGoods")
     public R getAllGoods(){
-        System.out.println("进入GoodsController - getAllGoods方法");
-
         List<Goods> goodsList = goodsService.getAllGoods();
-
-
-        //List<Goods> goodsList = goodsService.list();
         return R.ok().data("goodsList",goodsList);
-
     }
+
+    //得到所有未分配商家的商品列表
+    @GetMapping("/getGoodsNonDistribution")
+    public R getGoodsNonDistribution(){
+        List<Goods> goodsList = goodsService.getGoodsNonDistribution();
+        return R.ok().data("goodsList",goodsList);
+    }
+
+    //分页得到商品列表
+    @GetMapping("/getPageGoods/{currentPage}/{pageSize}")
+    public R getPageGoods(@PathVariable long currentPage,@PathVariable long pageSize){
+        Map<String, Object> map = goodsService.getPageGoods(currentPage, pageSize);
+        Object goodsList = map.get("goodsList");
+        Object total = map.get("total");
+        return R.ok().data("goodsList",goodsList).data("total",total);
+    }
+
+    /**
+     * 分页查询得到商品列表
+     * @param currentPage 当前页
+     * @param pageSize 页大小
+     * @return
+     */
+    @PostMapping("/getSearchGoods/{currentPage}/{pageSize}")
+    public R getSearchGoods(@PathVariable long currentPage, @PathVariable long pageSize,
+                            @RequestBody String goodsSearchVo
+                            ){
+        System.out.println("goodsSearchVo = " + goodsSearchVo);
+        //得到返回数据
+        Map<String, Object> resMap = goodsService.getSearchGoods(currentPage,pageSize,goodsSearchVo);
+        Object goodsList = resMap.get("goodsList");
+        Object total = resMap.get("total");
+
+        return R.ok().data("goodsList",goodsList).data("total",total);
+    }
+
 
     /*根据ID获得一个商品的详情*/
     @GetMapping("/getGood/{goodsId}")
@@ -78,6 +116,31 @@ public class GoodsController {
         Goods goods = goodsService.getOne(queryWrapper);
         return R.ok().data("goods",goods);
     }
+
+    //保存商品浏览历史（Redis缓存）
+    @GetMapping("/saveGoodsHistory/{goodsId}")
+    public R getRecentGoods(HttpServletRequest request,@PathVariable String goodsId){
+        String token = request.getHeader("token");
+        DecodedJWT verify = JwtUtil.verify(token);
+        String userId = verify.getClaim("userId").asString();
+
+        boolean res = goodsService.saveGoodsHistory(userId,goodsId);
+        return R.ok();
+    }
+
+    //获取用户商品浏览历史记录（Redis缓存）
+    @GetMapping("/getGoodsHistory")
+    public R getRecentGoods(HttpServletRequest request){
+        System.out.println("!!!GoodsController.getRecentGoods");
+
+        String token = request.getHeader("token");
+        DecodedJWT verify = JwtUtil.verify(token);
+        String userId = verify.getClaim("userId").asString();
+
+        List<Goods> goodsList = goodsService.getGoodsHistory(userId);
+        return R.ok().data("goodsList",goodsList);
+    }
+
 
 }
 

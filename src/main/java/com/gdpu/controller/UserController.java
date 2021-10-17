@@ -77,7 +77,13 @@ public class UserController {
     public R login(@RequestBody LoginVo loginVo){
         System.out.println("进入UserController -- login");
 
-        String token = userService.login(loginVo);
+        String token = null;
+        try {
+            token = userService.login(loginVo);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error();
+        }
         return R.ok().data("token",token);
     }
 

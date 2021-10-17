@@ -58,7 +58,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         //校验密码
         if(!password.equals(user.getPassword())){
-            throw new RuntimeException("密码不正确");
+            throw new RuntimeException("密码错误");
         }
 
         //Token信息

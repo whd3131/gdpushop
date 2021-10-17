@@ -2,4 +2,60 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gdpu.mapper.GoodsMapper">
 
+    <!--business_goods和goods表联查，查询未被分配的商品列表-->
+    <select id="getGoodsNonDistribution" resultType="com.gdpu.entity.Goods">
+        SELECT
+            goods_id,
+            title,
+            goods_content,
+            price,
+            goods_img,
+            cat_id,
+            is_deleted,
+            count_view,
+            count_buy,
+            count_comment
+
+        FROM goods g
+        WHERE g.goods_id NOT IN (
+            SELECT g.goods_id
+            FROM goods g
+                     JOIN business_goods bg
+                          on g.goods_id = bg.goods_id
+        ) AND is_deleted = 0
+    </select>
+    <select id="getSearchGoods" resultType="com.gdpu.entity.Goods">
+        SELECT g.* FROM goods g
+        join business_goods bg
+        on g.goods_id = bg.goods_id
+        join business b
+        on bg.business_id = b.business_id
+
+        <where>
+            <if test="title != null and title != '' ">
+                title LIKE CONCAT('%',#{title},'%')
+            </if>
+            <if test="business != null and business != ''">
+                AND b.business_name LIKE CONCAT('%',#{business},'%')
+            </if>
+            <if test="priceRange1 != null and priceRange1 != ''">
+                AND g.price &gt;= #{priceRange1}
+            </if>
+            <if test="priceRange2 != null and priceRange2 != ''">
+                AND g.price &lt;= #{priceRange2}
+            </if>
+
+        </where>
+
+
+        <if test="sortType == 0">
+            ORDER BY g.count_buy DESC
+        </if>
+        <if test="sortType == 1">
+            ORDER BY g.count_comment DESC
+        </if>
+
+
+        LIMIT #{begin},#{pageSize}
+    </select>
 </mapper>

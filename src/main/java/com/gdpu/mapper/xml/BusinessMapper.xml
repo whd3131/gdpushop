@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gdpu.mapper.BusinessMapper">
+
+    <select id="getBusinessByGoodsId" resultType="com.gdpu.entity.Business">
+        SELECT
+            business_id,
+            business_name,
+            count_praise,
+            business_content
+
+        FROM business b
+        WHERE b.business_id = (
+            SELECT business_id FROM business_goods bg
+            WHERE bg.goods_id = #{goodsId}
+        )
+    </select>
+</mapper>
