@@ -72,7 +72,7 @@ gdpu
 | Axios      | 前端HTTP框架     | [https://github.com/axios/axios](https://github.com/axios/axios)                 |
 | Js-cookie  | cookie管理工具   | [https://github.com/js-cookie/js-cookie](https://github.com/js-cookie/js-cookie) |
 
-后台管理系统采用vue-admin-design框架
+后台管理系统采用vue-admin-design框架 [VUE-admin-design](https://github.com/baimingxuan/vue-admin-design)
 
 ## 2.4 架构图
 
