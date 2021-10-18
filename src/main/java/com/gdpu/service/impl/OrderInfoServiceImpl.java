@@ -1,5 +1,6 @@
 package com.gdpu.service.impl;
 
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
@@ -51,16 +52,17 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         or.setUserId(userId);
         or.setOrderStatus(0);
 
+        String orderSign = IdUtil.simpleUUID();
+        or.setOrderSign(orderSign);
+
         int res = baseMapper.insert(or);
 
         if(res>0){
             //返回订单ID
             QueryWrapper<OrderInfo> wrapper = new QueryWrapper<>();
-            wrapper.eq("user_id",userId);
-            wrapper.eq("order_price",sum);
-            wrapper.eq("order_status",0);
-            wrapper.eq("create_time",new Date());
+            wrapper.eq("order_sign",orderSign); //查询刚才插入的这条订单的订单ID
             OrderInfo orderInfo = baseMapper.selectOne(wrapper);
+
             if(orderInfo!=null){
 
                 //根据cartId和orderId去向cart_order表中添加数据

@@ -42,6 +42,9 @@ public class OrderInfo implements Serializable {
     @ApiModelProperty(value = "订单创建人")
     private String userId;
 
+    @ApiModelProperty(value = "订单唯一标识")
+    private String orderSign;
+
     @ApiModelProperty(value = "逻辑删除(0表示未删除，1表示删除）")
     @TableLogic
     private Integer isDeleted;
