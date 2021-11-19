@@ -41,4 +41,7 @@ public interface GoodsService extends IService<Goods> {
 
     //分页查询得到商品列表
     Map<String, Object> getSearchGoods(long currentPage, long pageSize, String goodsSearchVo);
+
+    //更新商品的浏览量
+    boolean updateCountView(String goodsId);
 }

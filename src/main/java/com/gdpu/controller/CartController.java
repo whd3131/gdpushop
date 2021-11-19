@@ -1,10 +1,8 @@
 package com.gdpu.controller;
 
 
-import com.gdpu.entity.Cart;
 import com.gdpu.entity.vo.CartVo;
 import com.gdpu.service.CartService;
-import com.gdpu.service.CartVoService;
 import com.gdpu.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +23,6 @@ import java.util.List;
 public class CartController {
     @Autowired
     private CartService cartService;
-    @Autowired
-    private CartVoService cartVoService;
 
     @PostMapping("/deleteById")
     public R deleteById(@RequestBody String id){
@@ -54,7 +50,7 @@ public class CartController {
     @GetMapping("/getUserCart/{userId}")
     public R getUserCart(@PathVariable String userId){
         System.out.println("进入·CartController.getUserCart");
-        List<CartVo> cartList = cartVoService.getUserCart(userId);
+        List<CartVo> cartList = cartService.getUserCart(userId);
         return R.ok().data("cartList",cartList);
     }
 

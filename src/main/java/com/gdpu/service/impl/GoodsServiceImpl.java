@@ -249,4 +249,22 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         return resMap;
     }
 
+
+    //更新商品的浏览量
+    @Override
+    public boolean updateCountView(String goodsId) {
+
+        //旧记录
+        Goods oldGoods = baseMapper.selectById(goodsId);
+        Integer oldView = oldGoods.getCountView();
+        Integer newView = oldView+1;
+
+        //新记录
+        Goods newGoods = new Goods();
+        newGoods.setGoodsId(goodsId);
+        newGoods.setCountView(newView);
+        int res = baseMapper.updateById(newGoods);
+        return res>0;
+    }
+
 }

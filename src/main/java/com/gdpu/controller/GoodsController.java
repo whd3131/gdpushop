@@ -5,6 +5,7 @@ import cn.hutool.json.JSONObject;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.gdpu.entity.Goods;
 import com.gdpu.entity.Person;
 import com.gdpu.entity.vo.GoodsSearchVo;
@@ -34,10 +35,15 @@ import java.util.Map;
 @CrossOrigin
 public class GoodsController {
 
-;
-
     @Autowired
     private GoodsService goodsService;
+
+    //更新商品的浏览量
+    @PostMapping("/updateCountView/{goodsId}")
+    public R updateCountView(@PathVariable String goodsId){
+        boolean res = goodsService.updateCountView(goodsId);
+        return res?R.ok():R.error();
+    }
 
     //根据商品ID删除商品
     @PostMapping("/delGoods/{goodsId}")
@@ -119,7 +125,7 @@ public class GoodsController {
 
     //保存商品浏览历史（Redis缓存）
     @GetMapping("/saveGoodsHistory/{goodsId}")
-    public R getRecentGoods(HttpServletRequest request,@PathVariable String goodsId){
+    public R saveGoodsHistory(HttpServletRequest request,@PathVariable String goodsId){
         String token = request.getHeader("token");
         DecodedJWT verify = JwtUtil.verify(token);
         String userId = verify.getClaim("userId").asString();

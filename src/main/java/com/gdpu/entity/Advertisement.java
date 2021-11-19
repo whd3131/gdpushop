@@ -20,6 +20,7 @@ import lombok.EqualsAndHashCode;
  * @author whd
  * @since 2021-10-11
  */
+
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value="Advertisement对象", description="")

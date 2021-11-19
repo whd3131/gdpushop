@@ -16,9 +16,11 @@ import java.util.List;
  */
 public interface CartService extends IService<Cart> {
 
+    //获得用户购物车信息
+    List<CartVo> getUserCart(String userId);
+
     //保存到购物车
     boolean saveCart(String cart);
-
 
     //修改购物车里商品的数量
     boolean updateNums(String updateNums);

@@ -36,7 +36,7 @@ public class OrderInfo implements Serializable {
     @ApiModelProperty(value = "订单总价")
     private Integer orderPrice;
 
-    @ApiModelProperty(value = "交易状态(0:进行中1:已完成2:取消3:未付款)")
+    @ApiModelProperty(value = "交易状态(0:进行中1:已完成2:取消)")
     private Integer orderStatus;
 
     @ApiModelProperty(value = "订单创建人")

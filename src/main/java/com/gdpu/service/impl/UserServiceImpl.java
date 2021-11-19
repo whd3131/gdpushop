@@ -1,5 +1,6 @@
 package com.gdpu.service.impl;
 
+import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gdpu.entity.Goods;
 import com.gdpu.entity.GoodsOrder;
@@ -87,11 +88,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
             String orderId = orderInfo.getOrderId();
             Date createTime = orderInfo.getCreateTime();
+            //格式化创建时间
+            String formatCreateDate = DateUtil.format(createTime, "yyyy年MM月dd日 HH时mm分ss秒");
             Integer orderPrice = orderInfo.getOrderPrice();
             Integer orderStatus = orderInfo.getOrderStatus();
 
             userBuyVo.setOrderId(orderId);
-            userBuyVo.setCreateTime(createTime);
+            userBuyVo.setCreateTime(formatCreateDate);
             userBuyVo.setOrderPrice(orderPrice);
             userBuyVo.setOrderStatus(orderStatus);
 

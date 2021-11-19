@@ -5,10 +5,8 @@ import cn.hutool.json.JSONUtil;
 import com.gdpu.entity.Cart;
 import com.gdpu.entity.vo.CartVo;
 import com.gdpu.mapper.CartMapper;
-import com.gdpu.mapper.CartVoMapper;
 import com.gdpu.service.CartService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,8 +22,11 @@ import java.util.List;
 @Service
 public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements CartService {
 
-    @Autowired
-    CartVoMapper cartVoMapper;
+    //获得用户购物车信息
+    @Override
+    public List<CartVo> getUserCart(String userId) {
+        return baseMapper.getUserCart(userId);
+    }
 
     // 保存到购物车
     @Override

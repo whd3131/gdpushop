@@ -84,6 +84,8 @@ public class UserController {
             e.printStackTrace();
             return R.error();
         }
+
+
         return R.ok().data("token",token);
     }
 

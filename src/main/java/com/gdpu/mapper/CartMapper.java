@@ -15,4 +15,5 @@ import java.util.List;
  * @since 2021-10-08
  */
 public interface CartMapper extends BaseMapper<Cart> {
+    List<CartVo> getUserCart(String userId);
 }

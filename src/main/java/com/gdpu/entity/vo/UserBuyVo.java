@@ -25,7 +25,7 @@ public class UserBuyVo {
     private String orderId;
 
     @ApiModelProperty(value = "订单创建时间")
-    private Date createTime;
+    private String createTime;
 
     @ApiModelProperty(value = "订单总价")
     private Integer orderPrice;

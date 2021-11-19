@@ -9,7 +9,12 @@ import com.gdpu.entity.*;
 import com.gdpu.mapper.OrderInfoMapper;
 import com.gdpu.service.*;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.amqp.AmqpException;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessagePostProcessor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -38,6 +43,15 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
     @Autowired
     GoodsOrderService goodsOrderService;
 
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
+    @Value("${gdpu.order.exchange}")
+    private String orderExchange; //订单交换机
+
+    @Value("${gdpu.order.routingKey}")
+    private String orderRoutingKey; //订单路由key
+
 
     // 添加一条订单记录
     @Override
@@ -50,14 +64,17 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         OrderInfo or = new OrderInfo();
         or.setOrderPrice(Integer.valueOf(sum));
         or.setUserId(userId);
-        or.setOrderStatus(0);
+        or.setOrderStatus(0);   //订单状态为：进行中
 
         String orderSign = IdUtil.simpleUUID();
         or.setOrderSign(orderSign);
 
-        int res = baseMapper.insert(or);
+        int res = baseMapper.insert(or);    //插入一条订单
 
         if(res>0){
+            //rabbit投递消息
+            rabbitTemplate.convertAndSend(orderExchange,orderRoutingKey,orderSign,messagePostProcessor());
+
             //返回订单ID
             QueryWrapper<OrderInfo> wrapper = new QueryWrapper<>();
             wrapper.eq("order_sign",orderSign); //查询刚才插入的这条订单的订单ID
@@ -84,6 +101,24 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
 
         return null;
     }
+
+
+    //MQ:处理待发送消息,设置订单过期时间
+    private MessagePostProcessor messagePostProcessor(){
+        return  new MessagePostProcessor() {
+            @Override
+            public Message postProcessMessage(Message message) throws AmqpException {
+                //设置有效期30分钟
+                message.getMessageProperties().setExpiration("1800000");
+                //测试10秒的过期时间
+                //message.getMessageProperties().setExpiration("20000");
+                return message;
+            }
+        };
+    }
+
+
+
 
     // 删除一条订单
     @Override
@@ -153,7 +188,7 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
 
         OrderInfo oi = new OrderInfo();
         oi.setOrderId(oid);
-        oi.setOrderStatus(1);
+        oi.setOrderStatus(1);   //修改订单状态为1，已完成
         flag2 = orderInfoService.updateById(oi);
 
         // 清空该用户的购物车
